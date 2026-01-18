@@ -23,10 +23,24 @@ while True:
     rval, frame = vc.read()
     if rval == False or frame == None:
         break 
+    # Compute Motion Difference
+    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(frame, (21,21), 0)
+
+    # compute absolute difference between frames
+    diff = cv2.absdiff(prev_grey, gray)
+    # threshold the difference image
+    _, thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)
+    # show motion mask
+    cv2.imshow("motion", thresh)
+    # update reference frame 
+    prev_grey = gray
+
     cv2.imshow("preview", frame)
     key = cv2.waitKey(20)
     if key == ord('q'):
         break
+
 
 vc.release()
 cv2.destroyAllWindows()
