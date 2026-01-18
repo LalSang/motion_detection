@@ -19,10 +19,16 @@ vc = cv2.VideoCapture(0)
 if not vc.isOpened():
     raise RuntimeError("Could not open webcam")
 
+# Here we are checking if webcam is reading frames 
+# if not then we break 
 while True:
     rval, frame = vc.read()
-    cv2.imshow("preview", frame)
-
     if rval == False or frame == None:
-        exit 
-    
+        break 
+    cv2.imshow("preview", frame)
+    key = cv2.waitKey(20)
+    if key == ord('q'):
+        break
+
+vc.release()
+cv2.destroyAllWindows()
