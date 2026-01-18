@@ -22,6 +22,8 @@ prev_grey = cv2.GaussianBlur(prev_grey, (21,21), 0)
 # Here we are checking if webcam is reading frames 
 # if not then we break 
 while True:
+    motion_found = False
+
     rval, frame = vc.read()
     if rval == False:
         break 
@@ -44,10 +46,16 @@ while True:
 
     for c in contours:
         if cv2.contourArea(c) < MIN_AREA:
+            motion_found = True
             continue
 
         x, y, w, h = cv2.boundingRect(c)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    if motion_found:
+        cv2.putText(frame,"Motion", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,255,255),2,cv2.LINE_AA)
+    else:
+        cv2.putText(frame,"No Motion", (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,255,255), 2, cv2.LINE_AA)
 
     # show motion mask
     cv2.imshow("motion", thresh)
