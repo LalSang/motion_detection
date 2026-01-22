@@ -6,7 +6,7 @@ import cv2
 # 0 = "default camera"
 # vc is now a live connection, not a frame
 vc = cv2.VideoCapture(0)
-MIN_AREA = 1500
+MIN_AREA = 2000
 # Here we are checking if the webcam opens 
 # If not we throw an runtime error 
 # If webcam don't open then raise an runtimeerror 
@@ -37,8 +37,8 @@ while True:
     diff = cv2.absdiff(prev_grey, gray)
 
     # threshold the difference image
-    _, thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)
-    thresh = cv2.dilate(thresh, None, iterations=2)
+    _, thresh = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
+    thresh = cv2.dilate(thresh, None, iterations=1)
     thresh = cv2.erode(thresh, None, iterations=1)
 
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -53,9 +53,9 @@ while True:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     if motion_found:
-        cv2.putText(frame,"Motion", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,255,255),2,cv2.LINE_AA)
+        cv2.putText(frame,"Motion", (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0),2,cv2.LINE_AA)
     else:
-        cv2.putText(frame,"No Motion", (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,255,255), 2, cv2.LINE_AA)
+        cv2.putText(frame,"No Motion", (50,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0), 2, cv2.LINE_AA)
 
     # show motion mask
     cv2.imshow("motion", thresh)
